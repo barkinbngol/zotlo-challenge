@@ -11,15 +11,15 @@ use Illuminate\Support\Facades\Log;
 
 class SubscriptionStatusController extends Controller
 {
-    /**
-     * Zotlo webhook endpoint
-     */
+    
+     //  Zotlo webhook endpoint
+     
     public function handleWebhook(Request $request)
     {
-        // 1) Logla
+        // Logla
         Log::info('Zotlo webhook hit', ['payload' => $request->all()]);
 
-        // 2) Payload’ı normalize et
+        // Payload’ı normalize et
         $payload = $request->all();
 
         $profile = data_get($payload, 'profile', $payload);
@@ -28,26 +28,26 @@ class SubscriptionStatusController extends Controller
         $remoteStatus = data_get($profile, 'realStatus', data_get($profile, 'status'));
         $expireDate = data_get($profile, 'expireDate');
         $package = data_get($profile, 'package', data_get($payload, 'packageId'));
-        $origTxnId = data_get($profile, 'originalTransactionId'); // DB’de zotlo_subscription_id olarak tutuyoruz
+        $origTxnId = data_get($profile, 'originalTransactionId'); // DB’de zotlo_subscription_id olarak 
         $cancellation = data_get($profile, 'cancellation');
 
         if (! $subscriberId || ! $remoteStatus) {
             return response()->json(['error' => 'Eksik parametre'], 400);
         }
 
-        // 3) Local status eşlemesi
+        //  Local status eşlemesi
         $localStatus = $this->mapStatus($remoteStatus, $cancellation);
 
         DB::beginTransaction();
         try {
-            // a) Kullanıcıyı bul (zotlo_subscriber_id ile)
+            // Kullanıcıyı bul 
             $user = User::where('zotlo_subscriber_id', $subscriberId)->first();
 
             if (! $user) {
                 Log::warning('Webhook: user not found for subscriberId', ['subscriberId' => $subscriberId]);
             }
 
-            // b) Abonelik kaydını bul
+            // Abonelik kaydını bul
             $subscription = null;
 
             if ($origTxnId) {
@@ -60,14 +60,12 @@ class SubscriptionStatusController extends Controller
                     ->first();
             }
 
-            // c) Yoksa oluştur (isteğe bağlı)
             if (! $subscription) {
                 $subscription = new Subscription;
                 $subscription->user_id = $user?->id;
                 $subscription->zotlo_subscription_id = $origTxnId;
             }
 
-            // d) Alanları güncelle
             $subscription->status = $localStatus;
             $subscription->package_name = $package ?: $subscription->package_name;
             if ($expireDate) {
@@ -86,9 +84,9 @@ class SubscriptionStatusController extends Controller
         return response()->json(['message' => 'Webhook işlendi'], 200);
     }
 
-    /**
-     * local status map
-     */
+    
+     //  local status map
+     
     private function mapStatus(string $remoteStatus, $cancellation): string
     {
         $remoteStatus = strtolower($remoteStatus);

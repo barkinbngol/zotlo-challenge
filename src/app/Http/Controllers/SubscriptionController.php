@@ -17,9 +17,9 @@ class SubscriptionController extends Controller
         $this->zotlo = $zotlo;
     }
 
-    /*
-      Abonelik başlatma
-     */
+    
+    //  Abonelik başlatma
+     
     public function subscribe(Request $request): JsonResponse
     {
         Log::info('Subscribe fonksiyonu çalıştı');
@@ -46,7 +46,7 @@ class SubscriptionController extends Controller
             }
         }
 
-        // Kart & zorunlu alanlar validasyonu
+        // Kart ve zorunlu alanlar validasyonu
         $validated = $request->validate([
             'cardNo' => 'required|string',
             'cardOwner' => 'required|string',
@@ -91,9 +91,9 @@ class SubscriptionController extends Controller
         ]);
     }
 
-    /**
-     * Abonelik durumu sorgulama
-     */
+    
+    //   Abonelik durumu sorgulama
+     
     public function checkStatus(Request $request): JsonResponse
     {
         $user = $request->user();
@@ -117,9 +117,9 @@ class SubscriptionController extends Controller
         ]);
     }
 
-    /**
-     * Abonelik iptali
-     */
+    
+    //   Abonelik iptali
+     
     public function unsubscribe(Request $request): JsonResponse
     {
         $user = auth()->user();
