@@ -1,0 +1,33 @@
+[90m= [39m[
+    "[34msuccess[39m" => [36mtrue[39m,
+    "[34mraw[39m" => [
+      "[34mmeta[39m" => [
+        "[34mrequestId[39m" => "[32m192-168-1-94.eu-central-1.compute.internal-REQ-687fdbd6c1ec0[39m",
+        "[34mhttpStatus[39m" => [35m200[39m,
+      ],
+      "[34mresult[39m" => [
+        [
+          "[34mstatus[39m" => "[32mactive[39m",
+          "[34mrealStatus[39m" => "[32mactive[39m",
+          "[34msubscriberId[39m" => "[32musr-10-db8a297e-9308-4b6d-af01-0636a9e6a24d[39m",
+          "[34msubscriptionType[39m" => "[32mpaid[39m",
+          "[34mstartDate[39m" => "[32m2025-07-22 18:12:26[39m",
+          "[34mexpireDate[39m" => "[32m2025-08-22 18:12:26[39m",
+          "[34mpackage[39m" => "[32mzotlo.premium[39m",
+          "[34mlanguage[39m" => "[32mtr[39m",
+          "[34mcountry[39m" => "[32mTR[39m",
+          "[34mphoneNumber[39m" => "[32m+905555555555[39m",
+          "[34memail[39m" => [36mnull[39m,
+          "[34moriginalTransactionId[39m" => "[32m4393f73d-ba97-4bd5-a789-769d6f0026fa[39m",
+          "[34mcancellation[39m" => [36mnull[39m,
+          "[34mquantity[39m" => [35m1[39m,
+          "[34mpendingQuantity[39m" => [35m0[39m,
+          "[34mcustomParameters[39m" => [
+            "[34msubscriberIpAddress[39m" => "[32m127.0.0.1[39m",
+          ],
+          "[34mrenewalFetchCount[39m" => [35m0[39m,
+        ],
+      ],
+    ],
+  ]
+

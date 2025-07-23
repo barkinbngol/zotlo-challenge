@@ -1,0 +1,78 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: zotlo_app
+    working_dir: /var/www
+    volumes:
+      - ./src:/var/www
+    depends_on:
+      - db
+    networks:
+      - zotlo
+    restart: unless-stopped
+    command: php-fpm -F
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: zotlo_scheduler
+    working_dir: /var/www
+    volumes:
+      - ./src:/var/www
+    depends_on:
+      - db
+    networks:
+      - zotlo
+    restart: unless-stopped
+    command: sh -c "php artisan optimize:clear && php artisan schedule:work"
+
+  web:
+    image: nginx:latest
+    container_name: zotlo_nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - ./src:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - zotlo
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: zotlo_db
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: zotlo
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - zotlo
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: zotlo_phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - db
+    networks:
+      - zotlo
+
+volumes:
+  db_data:
+
+networks:
+  zotlo:
